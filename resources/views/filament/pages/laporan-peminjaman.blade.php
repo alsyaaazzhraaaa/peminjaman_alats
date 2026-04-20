@@ -16,7 +16,8 @@
             </div>
         @else
             <div class="flex flex-col items-center justify-center h-48 rounded-2xl border-2 border-dashed border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 text-base">
-                <span>Klik tombol <strong>Cetak PDF</strong> di atas untuk menampilkan preview laporan data alat.</span>
+                <span>Klik tombol <strong>Cetak PDF</strong> di atas, pilih filter (opsional), lalu preview akan muncul di sini.</span>
+                <span class="mt-2 text-sm text-gray-400">Biarkan filter kosong untuk menampilkan semua data laporan peminjaman.</span>
             </div>
         @endif
     </div>

@@ -3,19 +3,14 @@
 namespace App\Filament\Admin\Pages;
 
 use Filament\Pages\Page;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Schemas\Schema;
 use Filament\Forms\Components\DatePicker;
 use Filament\Actions\Action;
 use App\Models\Pengembalian;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Carbon;
 
-class LaporanPengembalian extends Page implements HasForms
+class LaporanPengembalian extends Page
 {
-    use InteractsWithForms;
-
     protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-document-text';
     protected static string | \UnitEnum | null $navigationGroup = 'Laporan';
     protected static ?string $title = 'Laporan Pengembalian';
@@ -23,52 +18,79 @@ class LaporanPengembalian extends Page implements HasForms
 
     protected string $view = 'filament.pages.laporan-pengembalian';
 
-    public ?array $data = [];
+    public ?string $pdfData     = null;
+    public ?string $filterStart = null;
+    public ?string $filterEnd   = null;
 
     public static function canAccess(): bool
     {
         return auth()->check() && auth()->user()->role !== 'peminjam';
     }
 
-    public function mount(): void
+    public function downloadPdf(): mixed
     {
-        $this->form->fill();
-    }
+        $pengembalianQuery = Pengembalian::with(['peminjaman.user']);
 
-    public function form(Schema $schema): Schema
-    {
-        return $schema
-            ->schema([
-                DatePicker::make('start_date')
-                    ->label('Tanggal Mulai')
-                    ->required(),
-                DatePicker::make('end_date')
-                    ->label('Tanggal Sampai')
-                    ->required()
-                    ->afterOrEqual('start_date'),
-            ])
-            ->statePath('data');
-    }
+        if ($this->filterStart) {
+            $pengembalianQuery->whereDate('tanggal_kembali', '>=', Carbon::parse($this->filterStart));
+        }
+        if ($this->filterEnd) {
+            $pengembalianQuery->whereDate('tanggal_kembali', '<=', Carbon::parse($this->filterEnd));
+        }
 
-    public function cetakPdf()
-    {
-        $data = $this->form->getState();
-        $startDate = $data['start_date'];
-        $endDate = $data['end_date'];
-
-        $pengembalian = Pengembalian::with(['peminjaman.user'])
-            ->whereDate('tanggal_kembali', '>=', Carbon::parse($startDate))
-            ->whereDate('tanggal_kembali', '<=', Carbon::parse($endDate))
-            ->get();
+        $pengembalian = $pengembalianQuery->get();
 
         $pdf = Pdf::loadView('pdf.laporan-pengembalian', [
-            'data' => $pengembalian,
-            'startDate' => $startDate,
-            'endDate' => $endDate
+            'data'      => $pengembalian,
+            'startDate' => $this->filterStart,
+            'endDate'   => $this->filterEnd,
         ]);
 
         return response()->streamDownload(function () use ($pdf) {
             echo $pdf->stream();
         }, 'laporan-pengembalian-' . Carbon::now()->format('Ymd') . '.pdf');
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            Action::make('cetak_pdf')
+                ->label('Cetak PDF')
+                ->color('primary')
+                ->modalHeading('Filter Laporan Pengembalian')
+                ->modalSubmitActionLabel('Tampilkan Preview')
+                ->form([
+                    DatePicker::make('start_date')
+                        ->label('Tanggal Mulai')
+                        ->native(false),
+                    DatePicker::make('end_date')
+                        ->label('Tanggal Sampai')
+                        ->native(false)
+                        ->afterOrEqual('start_date'),
+                ])
+                ->action(function (array $data) {
+                    $this->filterStart = $data['start_date'] ?? null;
+                    $this->filterEnd   = $data['end_date'] ?? null;
+
+                    $pengembalianQuery = Pengembalian::with(['peminjaman.user']);
+
+                    if ($this->filterStart) {
+                        $pengembalianQuery->whereDate('tanggal_kembali', '>=', Carbon::parse($this->filterStart));
+                    }
+                    if ($this->filterEnd) {
+                        $pengembalianQuery->whereDate('tanggal_kembali', '<=', Carbon::parse($this->filterEnd));
+                    }
+
+                    $pengembalian = $pengembalianQuery->get();
+
+                    $pdf = Pdf::loadView('pdf.laporan-pengembalian', [
+                        'data'      => $pengembalian,
+                        'startDate' => $this->filterStart,
+                        'endDate'   => $this->filterEnd,
+                    ]);
+
+                    $this->pdfData = base64_encode($pdf->output());
+                }),
+        ];
     }
 }
