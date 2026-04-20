@@ -1,0 +1,1 @@
+["id_alat","id_kategori","nama_alat","stok","kondisi","status","created_at"]

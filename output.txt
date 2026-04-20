@@ -1,0 +1,39 @@
+PHP Fatal error:  Cannot redeclare non static Filament\Pages\SimplePage::$view as static App\Filament\Pages\Auth\Login::$view in C:\Users\Noval\peminjaman_alats\app\Filament\Pages\Auth\Login.php on line 10
+
+   Symfony\Component\ErrorHandler\Error\FatalError 
+
+  Cannot redeclare non static Filament\Pages\SimplePage::$view as static App\Filament\Pages\Auth\Login::$view
+
+  at app\Filament\Pages\Auth\Login.php:10
+      6Ôûò use Filament\Forms\Components\TextInput;
+      7Ôûò use Filament\Schemas\Components\Component;
+      8Ôûò use Illuminate\Validation\ValidationException;
+      9Ôûò 
+  Ô×£  10Ôûò class Login extends BaseLogin
+     11Ôûò {
+     12Ôûò     protected static string $view = 'filament.pages.auth.login';
+     13Ôûò 
+     14Ôûò
+
+
+   Whoops\Exception\ErrorException 
+
+  Cannot redeclare non static Filament\Pages\SimplePage::$view as static App\Filament\Pages\Auth\Login::$view
+
+  at app\Filament\Pages\Auth\Login.php:10
+      6Ôûò use Filament\Forms\Components\TextInput;
+      7Ôûò use Filament\Schemas\Components\Component;
+      8Ôûò use Illuminate\Validation\ValidationException;
+      9Ôûò 
+  Ô×£  10Ôûò class Login extends BaseLogin
+     11Ôûò {
+     12Ôûò     protected static string $view = 'filament.pages.auth.login';
+     13Ôûò 
+     14Ôûò
+
+  1   vendor\filp\whoops\src\Whoops\Run.php:520
+      Whoops\Run::handleError()
+
+  2   [internal]:0
+      Whoops\Run::handleShutdown()
+

@@ -1,0 +1,1 @@
+["id_pengembalian","id_peminjaman","tanggal_kembali","denda","status_bayar","keterlambatan"]

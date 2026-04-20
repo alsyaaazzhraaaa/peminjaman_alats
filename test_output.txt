@@ -1,0 +1,45 @@
+
+   FAIL  Tests\Feature\AccessControlTest
+  Ô£ô admin can acceÔÇª 0.64s  
+  Ô¿» petugas accessÔÇª 0.06s  
+  Ô¿» peminjam accesÔÇª 0.05s  
+  ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ  
+   FAILED  Tests\Feature\AccessControlTest > petugas access restrictions  BadMethodCallException   
+  Call to undefined method App\Models\Peminjaman::factory()
+
+  at vendor\laravel\framework\src\Illuminate\Support\Traits\ForwardsCalls.php:67
+     63Ôûò      * @throws \BadMethodCallException
+     64Ôûò      */
+     65Ôûò     protected static function throwBadMethodCallException($method)
+     66Ôûò     {
+  Ô×£  67Ôûò         throw new BadMethodCallException(sprintf(
+     68Ôûò             'Call to undefined method %s::%s()', static::class, $method
+     69Ôûò         ));
+     70Ôûò     }
+     71Ôûò }
+
+  1   vendor\laravel\framework\src\Illuminate\Support\Traits\ForwardsCalls.php:67
+  2   vendor\laravel\framework\src\Illuminate\Support\Traits\ForwardsCalls.php:36
+
+  ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ  
+   FAILED  Tests\Feature\AccessControlTest > peminjam access restrictions  BadMethodCallException   
+  Call to undefined method App\Models\Peminjaman::factory()
+
+  at vendor\laravel\framework\src\Illuminate\Support\Traits\ForwardsCalls.php:67
+     63Ôûò      * @throws \BadMethodCallException
+     64Ôûò      */
+     65Ôûò     protected static function throwBadMethodCallException($method)
+     66Ôûò     {
+  Ô×£  67Ôûò         throw new BadMethodCallException(sprintf(
+     68Ôûò             'Call to undefined method %s::%s()', static::class, $method
+     69Ôûò         ));
+     70Ôûò     }
+     71Ôûò }
+
+  1   vendor\laravel\framework\src\Illuminate\Support\Traits\ForwardsCalls.php:67
+  2   vendor\laravel\framework\src\Illuminate\Support\Traits\ForwardsCalls.php:36
+
+
+  Tests:    2 failed, 1 passed (17 assertions)
+  Duration: 0.90s
+
